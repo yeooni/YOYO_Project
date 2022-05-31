@@ -23,7 +23,7 @@ public class Team {
     private String teamName;
 
     @NotNull
-    private LocalDate date;
+    private LocalDateTime date;
 
     @NotNull
     private String place;
