@@ -47,10 +47,15 @@ public class MeetingController {
     @PostMapping("/createMeeting")
     public void createMeeting(TeamForm teamForm){
         Team team = new Team();
+        System.out.println("================"+teamForm.getMeetingDate());
+        String getDates = teamForm.getMeetingDate().replace("T"," ");
+
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//        LocalDateTime dateTime = LocalDateTime.parse(teamForm.getMeetingDate());
+        LocalDateTime dateTime = LocalDateTime.parse(getDates,DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
         System.out.println(teamForm.getWritePlace());
-        LocalDate date = LocalDate.parse(teamForm.getMeetingDate(), DateTimeFormatter.ISO_DATE);
-        team.setDate(date);
+        team.setDate(dateTime);
         team.setTeamName(teamForm.getMeetingName());
         if(teamForm.getWritePlace()!=""){
             team.setPlace(teamForm.getWritePlace());
