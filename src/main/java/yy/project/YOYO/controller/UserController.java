@@ -14,7 +14,6 @@ import yy.project.YOYO.service.UserTeamService;
 import yy.project.YOYO.vo.UserVO;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @Slf4j
@@ -26,7 +25,6 @@ public class UserController {
 
     @GetMapping("/myPage")
     public String myPage(Model model){
-        System.out.println("왜안와");
 //        ==임시 로그인 ==
         User user = userService.findByUserID("rabbith3");
 
@@ -37,7 +35,15 @@ public class UserController {
         vo.setUserName(user.getUserName());
         vo.setEmail(user.getEmail());
 
+        String userImg = "";
+        if(user.getUserImage()==null){
+            userImg = "/adminImage/userIcon.png";
+        }else{
+            userImg = user.getUserImage();
+        }
+
         model.addAttribute("user",user);
+        model.addAttribute("userImg",userImg);
 
         return "myPage";
     }
@@ -47,7 +53,7 @@ public class UserController {
 //        == 임시 로그인 ==
         userService.updateUser("rabbith3", userForm);
 
-        return "myPage";
+        return "redirect:/myPage";
     }
 
     @GetMapping("/deleteUser")
