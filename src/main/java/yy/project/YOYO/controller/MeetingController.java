@@ -15,10 +15,16 @@ import yy.project.YOYO.service.TeamService;
 import yy.project.YOYO.service.UserService;
 import yy.project.YOYO.service.UserTeamService;
 import yy.project.YOYO.form.TeamForm;
+import yy.project.YOYO.vo.MeetingVO;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @Slf4j
@@ -33,7 +39,8 @@ public class MeetingController {
     @GetMapping("/createMeeting")
     public String home(Model model){
         model.addAttribute("user", "rabbith3");
-        return "createMeeting";}
+        return "createMeeting";
+    }
 
     @ResponseBody
     @PostMapping("/validateMem")
@@ -88,6 +95,52 @@ public class MeetingController {
             }
         }
 
+    }
+
+    @GetMapping("/checkMeeting")
+    public String checkMeeting(){
+        return "checkMeeting";
+    }
+
+
+    @ResponseBody
+    @GetMapping("/findMeeting")
+    public List<MeetingVO> findMeeting(Model model){
+//        임시 로그인
+        User user = userService.findByUserID("rabbith3");
+        List<UserTeam> myTeams = userTeamService.findByUID(user.getUID());
+        model.addAttribute("user",user);
+
+        MeetingVO vo = null;
+        List<MeetingVO> voList = new ArrayList<>();
+
+        for(int i=0; i<myTeams.size(); i++){
+            vo = new MeetingVO();
+            Team team = myTeams.get(i).getTeam();
+            if(team.getDate().isAfter(LocalDateTime.now())) {
+                Long tid = team.getTID();
+                vo.setPlace(team.getPlace());
+                vo.setTeamName(team.getTeamName());
+                vo.setTime(team.getDate());
+
+                List<UserTeam> byTID = userTeamService.findByTID(tid);
+                List<String> mem = new ArrayList<>();
+                for (int j = 0; j < byTID.size(); j++) {
+                    if (byTID.get(j).getUser().getUserImage() == null) {
+                        mem.add("/adminImage/userIcon.png");
+                    } else {
+                        mem.add(byTID.get(j).getUser().getUserImage());
+                    }
+                }
+                vo.setMembers(mem);
+
+                voList.add(vo);
+            }
+        }
+
+        voList = voList.stream().sorted(Comparator.comparing(MeetingVO::getTime)).collect(Collectors.toList());
+
+        return voList;
     }
 
 }
