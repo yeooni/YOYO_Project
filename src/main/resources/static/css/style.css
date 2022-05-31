@@ -111,6 +111,28 @@ button:hover{
     margin: 20px 0;
 }
 
+.meetingContainer {
+    margin: 50px 0 100px 0;
+}
+.meetingContainer input {
+    font-size: 14px;
+}
+
+.myPageContainer {
+    margin: 50px 0 100px 0;
+}
+.myPageContainer input{
+    font-size: 14px;
+}
+
+.myPageContainer button {
+    margin-bottom: 10px;
+}
+
+.myPageContainer fieldset {
+    margin-bottom: 30px;
+}
+
 /* ---------------main------------------- */
 /* ---------------footer------------------- */
 .footer {
