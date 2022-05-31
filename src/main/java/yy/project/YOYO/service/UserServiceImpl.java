@@ -1,6 +1,9 @@
 package yy.project.YOYO.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -17,6 +20,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
+    private final JavaMailSender javaMailSender;
 
     public int memberCheck(String userID){
         User user = userRepository.findByUserID(userID);
@@ -97,4 +101,42 @@ public class UserServiceImpl implements UserService{
     public void deleteUser(User user){
         userRepository.delete(user);
     }
+
+
+    //아이디,비밀번호 찾기
+    @Override
+    public List<User> findByEmail(String email){
+        return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public User findByUserNameAndEmail(String userName,String email){ return userRepository.findByUserNameAndEmail(userName,email); }
+
+    @Override
+    public String getTempPW(){
+        char[] charSet = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
+                'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+
+        String str = "";
+
+        int idx = 0;
+        for (int i = 0; i < 10; i++) {
+            idx = (int) (charSet.length * Math.random());
+            str += charSet[idx];
+        }
+        return str;
+    }
+
+    @Override
+    @Async
+    public void mailToPW(String userName,String email, String tempPW){
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(email);                              //수신자
+        message.setFrom("mannayo0609@gmail.com");        //발신자.
+        message.setSubject("[YOYO!] "+userName+"님 임시비밀번호 발급 메일입니다.");       //메일 제목
+        String sendMsg = userName+"님의 임시 비밀번호 생성 안내를 위해 발송된 메일입니다.\n 임시 비밀번호는 "+tempPW + "입니다.";
+        message.setText(sendMsg);                   //메일 내용
+        javaMailSender.send(message);
+    }
+
 }
