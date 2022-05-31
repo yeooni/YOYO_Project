@@ -23,6 +23,7 @@ public class UserTeamServiceImpl implements UserTeamService{
     public List<UserTeam> findByUID(Long uid){
        return userTeamRepository.findByUID(uid);
     }
+    public List<UserTeam> findByTID(Long tid){ return userTeamRepository.findByTID(tid); }
 
 
 }
