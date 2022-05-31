@@ -84,6 +84,7 @@ public class UserServiceImpl implements UserService{
         user.setPassword(form.getPassword());
         user.setUserName(form.getUserName());
         user.setEmail(form.getEmail());
+        user.setAddress(form.getAddress());
 
         if(userImage != null){
             user.setUserImage(userImage);
