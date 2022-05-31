@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 
 @Entity
@@ -30,14 +31,13 @@ public class Food {
     @NotNull
     private String season;
 
-
     private String weather;
 
-
-    private String event;
+    private LocalDate event;
 
     @NotNull
-    private String priority;
+    private char priority;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="tID")

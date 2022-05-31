@@ -5,7 +5,7 @@ spring:
     active: stomp
 
   datasource:
-    url: jdbc:mysql://yoyo.cgenyk496gbx.us-east-1.rds.amazonaws.com:3306/yoyo?serverTimezone=UTC&characterEncoding=UTF-8
+    url: jdbc:mysql://yoyo.cgenyk496gbx.us-east-1.rds.amazonaws.com:3306/yoyo?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username:
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -26,6 +26,15 @@ spring:
       ddl-auto: update
     generate-ddl: true
     show-sql: true
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username:
+    password:
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
 
 
 logging:
